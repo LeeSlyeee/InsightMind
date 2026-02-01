@@ -162,9 +162,11 @@ const fetchPatientDetail = async () => {
         // [Fix] SSL 적용 완료! HTTPS 사용
         const baseURL = 'https://150.230.7.76.nip.io/api/v1/';
         const res = await axios.get(`${baseURL}diaries/staff/patients/${userId}/`);
+        console.log("🔍 [DEBUG] API Response:", res.data); // 디버깅용 로그
         
         patient.value = res.data.patient;
-        
+        console.log("🔍 [DEBUG] Patient Data:", patient.value); // 디버깅용 로그
+
         const rawDiaries = res.data.diaries || [];
         
         // 1. 데이터 정규화 (Normalize)
