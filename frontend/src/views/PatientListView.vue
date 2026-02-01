@@ -116,9 +116,12 @@ onUnmounted(() => {
                         class="hover:bg-indigo-50/30 transition cursor-pointer"
                         @click="goToDetail(patient.id)"
                     >
-                         <td class="px-8 py-6 font-bold text-slate-800 text-lg">
-                             {{ patient.username }}
-                         </td>
+                          <td class="px-8 py-6">
+                             <div class="flex flex-col">
+                                 <span class="font-bold text-slate-800 text-lg">{{ patient.name || '실명없음' }}</span>
+                                 <span class="text-sm text-slate-400 font-mono">({{ patient.username }})</span>
+                             </div>
+                          </td>
                          <td class="px-8 py-6 text-slate-600">{{ patient.email }}</td>
                          <td class="px-8 py-6 text-slate-500">{{ formatDate(patient.joined_at) }}</td>
                          <td class="px-8 py-6 text-center font-medium">{{ patient.diary_count }}</td>

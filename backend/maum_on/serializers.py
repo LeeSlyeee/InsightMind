@@ -7,11 +7,19 @@ class MaumOnSerializer(serializers.ModelSerializer):
     ai_analysis = serializers.CharField(write_only=True, required=False, allow_blank=True)
     ai_prediction = serializers.CharField(write_only=True, required=False, allow_blank=True)
     
+    user_info = serializers.SerializerMethodField()
+
     class Meta:
         model = MaumOn
-        fields = ('id', 'user', 'content', 'mood_score', 'analysis_result', 'is_high_risk', 'created_at', 
+        fields = ('id', 'user', 'user_info', 'content', 'mood_score', 'analysis_result', 'is_high_risk', 'created_at', 
                   'ai_comment', 'ai_advice', 'ai_analysis', 'ai_prediction')
-        read_only_fields = ('is_high_risk', 'user')
+        read_only_fields = ('is_high_risk', 'user', 'user_info')
+
+    def get_user_info(self, obj):
+        return {
+            'username': obj.user.username,
+            'name': obj.user.first_name or '실명없음'
+        }
     
     def create(self, validated_data):
         # Extract AI fields if present (though create usually doesn't have them yet)

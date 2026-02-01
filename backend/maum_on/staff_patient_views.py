@@ -31,6 +31,7 @@ class PatientListView(views.APIView):
             data.append({
                 'id': p.id,
                 'username': p.username,
+                'name': p.first_name or '실명없음',
                 'email': p.email,
                 'diary_count': p.diary_count,
                 'risk_count': p.risk_count,
@@ -63,6 +64,7 @@ class PatientDetailView(views.APIView):
             'patient': {
                 'id': patient.id,
                 'username': patient.username,
+                'name': patient.first_name or '실명없음',
                 'email': patient.email,
                 'joined_at': patient.date_joined
             },

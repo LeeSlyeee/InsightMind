@@ -261,8 +261,9 @@ onUnmounted(() => {
                 </button>
                 <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">환자 상세 대시보드</h1>
              </div>
-             <div class="text-lg text-slate-500">
-                Patient ID: <span class="font-mono font-bold text-xl">{{ route.params.id }}</span>
+             <div class="text-lg text-slate-500 text-right">
+                <div class="text-sm text-slate-400">Patient ID</div>
+                <div class="font-mono font-bold text-xl">{{ route.params.id }}</div>
              </div>
         </header>
 
@@ -278,7 +279,8 @@ onUnmounted(() => {
                          <div class="w-28 h-28 rounded-full bg-indigo-50 border-4 border-indigo-100 flex items-center justify-center text-5xl mb-4 shadow-inner">
                             👤
                          </div>
-                         <h2 class="text-3xl font-extrabold text-slate-800">{{ patient?.username }}</h2>
+                         <h2 class="text-3xl font-extrabold text-slate-800 mb-1">{{ patient?.name || '실명없음' }}</h2>
+                         <p class="text-sm text-slate-400 font-mono bg-slate-50 px-3 py-1 rounded mb-2">({{ patient?.username }})</p>
                          <p class="text-base text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full mt-2 font-medium">{{ patient?.email }}</p>
                     </div>
                     

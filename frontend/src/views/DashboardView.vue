@@ -382,7 +382,12 @@ onUnmounted(() => {
                         <!-- 실제 데이터 렌더링 -->
                         <tr v-for="diary in highRiskDiaries" :key="diary.id" class="bg-white border-b hover:bg-slate-50 transition">
                             <td class="px-8 py-6 font-medium">{{ formatDate(diary.created_at) }}</td>
-                            <td class="px-8 py-6 font-bold text-slate-900 text-lg">User_{{ diary.id }}</td>
+                            <td class="px-8 py-6">
+                                <div class="flex flex-col">
+                                    <span class="font-bold text-slate-900 text-lg">{{ diary.user_info?.name || '실명없음' }}</span>
+                                    <span class="text-sm text-slate-400 font-mono">({{ diary.user_info?.username || diary.user }})</span>
+                                </div>
+                            </td>
                             <td class="px-8 py-6 text-red-600 hover:text-red-800 cursor-pointer font-medium" :title="diary.content || ''">
                                 {{ (diary.content || '').length > 25 ? (diary.content || '').slice(0,25) + '...' : (diary.content || '-') }}
                             </td>
