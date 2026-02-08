@@ -10,7 +10,7 @@ django.setup()
 
 from django.contrib.auth import get_user_model
 from django.utils.dateparse import parse_datetime, parse_date
-from maum_on.models import MaumOn
+from haru_on.models import HaruOn
 
 User = get_user_model()
 
@@ -91,7 +91,7 @@ def import_diaries(json_path):
              created_at = timezone.now()
 
         # Check if exists
-        if MaumOn.objects.filter(user=user, created_at=created_at).exists():
+        if HaruOn.objects.filter(user=user, created_at=created_at).exists():
             skipped += 1
             continue
             
@@ -113,7 +113,7 @@ def import_diaries(json_path):
              if k in d_data:
                  analysis[k] = d_data[k]
         
-        diary = MaumOn(
+        diary = HaruOn(
             user=user,
             content=content, # This might be encrypted string.
             mood_score=mood_score,

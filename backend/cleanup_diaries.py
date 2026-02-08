@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from maum_on.models import MaumOn
+from haru_on.models import HaruOn
 import datetime
 
 User = get_user_model()
@@ -12,7 +12,7 @@ def clean_duplicates(username):
             print(f"User {username} not found")
             return
 
-        all_diaries = MaumOn.objects.filter(user=u)
+        all_diaries = HaruOn.objects.filter(user=u)
         # Group by date
         date_map = {}
         for d in all_diaries:

@@ -7,7 +7,7 @@ from cryptography.fernet import Fernet
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from maum_on.models import MaumOn
+from haru_on.models import HaruOn
 
 # Key from vibe_coding project (Step 685)
 LEGACY_KEY = b'no-cI2OmQ0K2Eb7cNlfmndN159GET62e-YqVncAkjKg='
@@ -30,7 +30,7 @@ def decrypt_text(text):
 
 def decrypt_diaries():
     print("Starting decryption of imported diaries...")
-    diaries = MaumOn.objects.all()
+    diaries = HaruOn.objects.all()
     count = 0
     updated = 0
     

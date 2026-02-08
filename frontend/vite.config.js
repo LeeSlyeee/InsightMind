@@ -15,6 +15,13 @@ export default defineConfig({
   },
   server: {
     port: 5175,
-    host: true
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'https://150.230.7.76.nip.io',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
   }
 })

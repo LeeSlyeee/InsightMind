@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     # Local apps
     "accounts",
     "centers",
-    "maum_on",
+    "haru_on",
     "b2g_sync",
 ]
 
@@ -69,7 +69,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME", "maumon_db"),
+        "NAME": os.getenv("DB_NAME", "haruon_db"),
         "USER": os.getenv("DB_USER", "root"),
         "PASSWORD": os.getenv("DB_PASSWORD", ""),
         "HOST": os.getenv("DB_HOST", "127.0.0.1"),
@@ -132,10 +132,19 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:5174",
 ]
 CSRF_TRUSTED_ORIGINS = [
     "https://217.142.253.35.nip.io",
     "https://150.230.7.76.nip.io",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "http://localhost:5174",
+]
+
+# [Emergency Fix] Regex-based Origin Allow (Port-Agnostic)
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https?://localhost(:[0-9]+)?$",
+    r"^https?://127\.0\.0\.1(:[0-9]+)?$",
+    r"^https?://.*\.nip\.io$",
 ]

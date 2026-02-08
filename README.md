@@ -1,6 +1,6 @@
-# Maum-On B2G System (InsightMind)
+# Haru-On B2G System (InsightMind)
 
-보건소 연동형 마음-ON 시스템 프로젝트입니다.
+보건소 연동형 하루-ON 시스템 프로젝트입니다.
 
 ## 📂 프로젝트 구조
 

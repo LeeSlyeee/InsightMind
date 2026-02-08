@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MaumOnViewSet, StatisticsView
+from .views import HaruOnViewSet, StatisticsView
 from .staff_views import StaffDiaryViewSet
 from .staff_patient_views import PatientListView, PatientDetailView
 
@@ -8,7 +8,7 @@ router = DefaultRouter()
 router.register(r'staff/diaries', StaffDiaryViewSet, basename='staff-diaries')
 # r'' registration needs to be handled carefully. 
 # Ideally, we should register it last or rely on DRF's ordering.
-router.register(r'', MaumOnViewSet, basename='maumon')
+router.register(r'', HaruOnViewSet, basename='haruon')
 
 urlpatterns = [
     # 환자 관리 API (가장 먼저 매칭)

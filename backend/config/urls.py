@@ -6,19 +6,19 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Maum-On API",
+      title="Haru-On API",
       default_version='v1',
-      description="마음-ON 보건소 연동 시스템 API 문서",
+      description="하루-ON 보건소 연동 시스템 API 문서",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@maumon.local"),
+      contact=openapi.Contact(email="contact@haruon.local"),
       license=openapi.License(name="BSD License"),
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
 
-from maum_on.staff_patient_views import PatientListView, PatientDetailView
-from maum_on.views import StatisticsView
+from haru_on.staff_patient_views import PatientListView, PatientDetailView
+from haru_on.views import StatisticsView
 
 urlpatterns = [
     # [Emergency Bypass] 403 방지를 위한 최우선 경로 매핑 (Router 우회)
@@ -29,8 +29,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # Accounts (Auth)
     path("api/v1/auth/", include("accounts.urls")),
-    # Maum-On (Diary)
-    path("api/v1/diaries/", include("maum_on.urls")),
+    # Haru-On (Diary)
+    path("api/v1/diaries/", include("haru_on.urls")),
     # Centers & B2G
     path("api/v1/centers/", include("centers.urls")),
     path("api/v1/connect/", include("b2g_sync.urls")),

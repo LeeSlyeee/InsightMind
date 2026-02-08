@@ -1,6 +1,6 @@
-# 🏥 보건소 연동형 마음-ON 시스템 구현 계획 (B2G Health Sync)
+# 🏥 보건소 연동형 하루-ON 시스템 구현 계획 (B2G Health Sync)
 
-본 문서는 기존 '마음-ON' 프로젝트를 기반으로, **보건소(관공서)와 연동**되는 B2G 특화 시스템을 **MariaDB**, **Django**, **Vue.js** 스택으로 재구축하기 위한 상세 구현 계획입니다.
+본 문서는 기존 '하루-ON' 프로젝트를 기반으로, **보건소(관공서)와 연동**되는 B2G 특화 시스템을 **MariaDB**, **Django**, **Vue.js** 스택으로 재구축하기 위한 상세 구현 계획입니다.
 
 ---
 
@@ -87,7 +87,7 @@
 | `consented_at` | DateTime                             | 정보 제공 동의 일시     |
 | `expired_at`   | DateTime                             | 연동 만료 일시 (선택적) |
 
-### 4) Maum-On (감정 일기)
+### 4) haruON (감정 일기)
 
 사용자가 작성한 일기 및 분석 데이터입니다.
 
@@ -113,7 +113,7 @@
 2.  **`centers`**: 보건소 정보 관리, 기관 코드 생성 및 검증 로직.
 3.  **`diaries`**: 일기 CRUD, AI 모델(Gemma 2/Ollama) 연동 분석 로직.
 4.  **`b2g_sync`**:
-    - **Core Logic**: 데이터 동기화 API. 사용자의 동의 하에 `Maum-On` 중 위험도가 높거나 요약된 데이터를 조회할 수 있는 API 제공.
+    - **Core Logic**: 데이터 동기화 API. 사용자의 동의 하에 `haruON` 중 위험도가 높거나 요약된 데이터를 조회할 수 있는 API 제공.
     - **Security**: 보건소 담당자 전용 권한(Permission) 처리.
 
 ### 📡 API Endpoints (Draft)

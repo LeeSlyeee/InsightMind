@@ -1,8 +1,8 @@
 from rest_framework import views, status, permissions
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
-from maum_on.models import MaumOn
-from maum_on.serializers import MaumOnSerializer
+from haru_on.models import HaruOn
+from haru_on.serializers import HaruOnSerializer
 from django.db.models import Count, Q
 
 User = get_user_model()
@@ -20,8 +20,16 @@ class PatientListView(views.APIView):
         #     return Response([])
 
         # 환자 목록 + 최근 일기 상태 요약
-        # 관리자(is_superuser)와 스태프(is_staff)를 모두 제외
-        patients = User.objects.filter(is_superuser=False, is_staff=False).annotate(
+        # 관리자(is_superuser)와 스태프(is_staff) 제외
+        # [Filter] 임시 계정('app_') 제외 및 실명(first_name)이 있는 사용자만 표시
+        patients = User.objects.filter(
+            is_superuser=False, 
+            is_staff=False
+        ).exclude(
+            username__startswith='app_'
+        ).exclude(
+            first_name=''
+        ).annotate(
             diary_count=Count('diaries'),
             risk_count=Count('diaries', filter=Q(diaries__is_high_risk=True))
         )
@@ -57,8 +65,8 @@ class PatientDetailView(views.APIView):
         except User.DoesNotExist:
             return Response({'error': '환자를 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
             
-        diaries = MaumOn.objects.filter(user=patient).order_by('-created_at')
-        serializer = MaumOnSerializer(diaries, many=True)
+        diaries = HaruOn.objects.filter(user=patient).order_by('-created_at')
+        serializer = HaruOnSerializer(diaries, many=True)
         
         return Response({
             'patient': {
@@ -81,7 +89,7 @@ class PatientDetailView(views.APIView):
             return Response({'error': '환자를 찾을 수 없습니다.'}, status=status.HTTP_404_NOT_FOUND)
 
         # 1. Fetch Recent Diaries (Last 10 records)
-        recent_diaries = MaumOn.objects.filter(user=patient).order_by('-created_at')[:10]
+        recent_diaries = HaruOn.objects.filter(user=patient).order_by('-created_at')[:10]
         
         if not recent_diaries:
             return Response({'result': "분석할 최근 데이터가 충분하지 않습니다."}, status=200)

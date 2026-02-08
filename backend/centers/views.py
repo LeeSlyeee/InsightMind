@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from .models import Center, VerificationCode
 from .serializers import CenterSerializer
 from django.contrib.auth import get_user_model
-from maum_on.models import MaumOn
+from haru_on.models import HaruOn
 from django.utils.dateparse import parse_datetime
 from datetime import datetime
 
@@ -132,14 +132,15 @@ def verify_center_code(request):
                             continue
                             
                     if temp_user and temp_user != owner_user:
-                        # [Data Migration] MaumOn 일기 소유권 이전
+                        # [Data Migration] haruON 일기 소유권 이전
                         # update()는 QuerySet에 바로 적용되어 효율적
-                        moved_count = MaumOn.objects.filter(user=temp_user).update(user=owner_user)
+                        moved_count = HaruOn.objects.filter(user=temp_user).update(user=owner_user)
                         print(f"🚚 [Verify] Data Migration: Moved {moved_count} items from {temp_user.username} to {owner_user.username}")
                         
                         # (Optional) 임시 계정 비활성화
-                        # temp_user.is_active = False
-                        # temp_user.save()
+                        temp_user.is_active = False
+                        temp_user.save()
+                        print(f"🚫 [Merge] Deactivated temporary user: {temp_user.username}")
                         
                 except Exception as ex:
                     print(f"⚠️ [Verify] Merge Warning: {ex}")
@@ -268,7 +269,7 @@ class SyncDataView(views.APIView):
              return Response({'error': 'Unauthorized / Center Code Mismatch'}, status=401)
         
         # 2. Fetch Diaries
-        diaries = MaumOn.objects.filter(user=target_user).order_by('created_at')
+        diaries = HaruOn.objects.filter(user=target_user).order_by('created_at')
         data = []
         for d in diaries:
             analysis = d.analysis_result or {}
@@ -442,7 +443,7 @@ class SyncDataView(views.APIView):
                 
                 # 중복 방지 (Update or Create)
                 # target_user를 사용하여 기존 사용자에게 데이터 귀속
-                obj, created_at_db = MaumOn.objects.update_or_create(
+                obj, created_at_db = HaruOn.objects.update_or_create(
                     user=target_user,
                     created_at=created_at,
                     defaults={
@@ -465,6 +466,33 @@ class SyncDataView(views.APIView):
         if any((item.get('score', 10) <= 2) for item in mood_metrics):
              target_user.risk_level = User.RiskLevel.HIGH
              target_user.save()
+
+        # [CRITICAL UPDATE: Relay to Server 217]
+        # iOS App -> Server 150 (Here) -> Server 217 (vibe_coding)
+        # 150 서버에 저장된 후, 즉시 217 서버로 데이터를 'Toss' 합니다.
+        if center_code:
+            try:
+                import requests
+                import json
+                
+                # 217 서버가 기대하는 포맷으로 재구성
+                # (사실상 들어온 포맷 그대로 넘겨도 됨, 217도 동일한 프로토콜 사용)
+                relay_payload = {
+                    "center_code": center_code,
+                    "user_nickname": nickname, # Original Nickname from App
+                    "risk_level": target_user.risk_level if hasattr(target_user, 'risk_level') else 1,
+                    "mood_metrics": mood_metrics
+                }
+                
+                target_url = "https://217.142.253.35.nip.io/api/v1/centers/sync-data/"
+                
+                print(f"🚀 [Relay 150->217] Forwarding {len(mood_metrics)} items for {nickname}")
+                requests.post(target_url, json=relay_payload, timeout=5, verify=False)
+                print("✅ [Relay 150->217] Success")
+                
+            except Exception as e:
+                print(f"❌ [Relay 150->217] Failed: {e}")
+                # Don't fail the client response, this is a distinct backend process
 
         return Response({
             'success': True,

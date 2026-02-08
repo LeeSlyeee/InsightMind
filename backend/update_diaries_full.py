@@ -11,7 +11,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from django.contrib.auth import get_user_model
-from maum_on.models import MaumOn
+from haru_on.models import HaruOn
 
 User = get_user_model()
 
@@ -80,8 +80,8 @@ def update_diaries_full(json_path, user_map_path):
         if not created_at: continue
         
         try:
-            diary = MaumOn.objects.get(user=user, created_at=created_at)
-        except MaumOn.DoesNotExist:
+            diary = HaruOn.objects.get(user=user, created_at=created_at)
+        except HaruOn.DoesNotExist:
             continue
 
         # Prepare Extra Fields to inject into analysis_result

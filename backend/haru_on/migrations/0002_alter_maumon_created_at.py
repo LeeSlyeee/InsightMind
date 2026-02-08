@@ -7,7 +7,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("maum_on", "0001_initial"),
+        ("haru_on", "0001_initial"),
     ]
 
     operations = [
