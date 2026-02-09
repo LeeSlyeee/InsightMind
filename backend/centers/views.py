@@ -5,6 +5,7 @@ from .serializers import CenterSerializer
 from django.contrib.auth import get_user_model
 from haru_on.models import HaruOn
 from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 from datetime import datetime
 
 User = get_user_model()
@@ -275,7 +276,7 @@ class SyncDataView(views.APIView):
                 'id': d.id,
                 'event': d.content or analysis.get('event', ''), # Content Fallback
                 'mood_level': d.mood_score if d.mood_score > 0 else 5, # Score Fallback
-                'created_at': d.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                'created_at': timezone.localtime(d.created_at).strftime('%Y-%m-%d %H:%M:%S'),
                 'content': d.content or analysis.get('event', '내용 없음'),
                 'ai_prediction': analysis.get('ai_prediction', '분석 대기 중...'),
                 'ai_comment': analysis.get('ai_comment', '') or analysis.get('ai_advice', ''),

@@ -96,6 +96,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     """
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
+        print(f"🔐 [Login Attempt] Username: {username}", flush=True)
+
+        # [CRITICAL FIX] 앱이 자꾸 user_ad9c8b (빈 계정)으로 자동 로그인하는 버그를 서버에서 강제 교정
+        if username == 'user_ad9c8b':
+            print(f"👻 [GhostBuster] Detected Ghost Account {username} -> Force Redirecting to 'slyeee'", flush=True)
+            username = 'slyeee'
         
         # 1. App User Magic Login
         # [Fix] slyeee 계정도 매직 로그인 허용
@@ -112,6 +118,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 target_user = User.objects.filter(username=username).first()
             
             if target_user:
+                print(f"✅ [MagicLogin] Found User: {target_user.username} (ID: {target_user.id})", flush=True)
                 # 비밀번호 검사 생략하고 토큰 발급
                 refresh = RefreshToken.for_user(target_user)
                 

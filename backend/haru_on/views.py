@@ -9,10 +9,16 @@ class HaruOnViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny] # 403 방지를 위해 완화 (쿼리셋에서 걸러냄)
 
     def get_queryset(self):
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"🔍 [HaruOnViewSet] Request from: {self.request.user} (Auth: {self.request.auth})")
         if not self.request.user.is_authenticated:
+            logger.error("❌ [HaruOnViewSet] User is NOT authenticated -> Returning empty list.")
             return HaruOn.objects.none()
         # 자신의 일기만 조회 가능
-        return HaruOn.objects.filter(user=self.request.user)
+        qs = HaruOn.objects.filter(user=self.request.user)
+        logger.error(f"✅ [HaruOnViewSet] Returning {qs.count()} records for {self.request.user}")
+        return qs
     
     @action(detail=False, methods=['get'], url_path='date/(?P<date>[^/.]+)')
     def get_by_date(self, request, date=None):
