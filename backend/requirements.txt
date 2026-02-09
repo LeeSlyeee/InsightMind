@@ -19,3 +19,4 @@ PyYAML
 sqlparse
 typing_extensions
 uritemplate
+requests
